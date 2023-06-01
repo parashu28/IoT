@@ -1,0 +1,195 @@
+******************************** IoT Test Programs ******************************************
+
+1) Temperature Sensor
+
+float temp;
+int tempPin = A1;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  temp = analogRead(tempPin);
+  temp = temp * (5000/1024);
+  Serial.print("Temperature = ");
+  Serial.print(temp);
+  Serial.print(" *C");
+  Serial.println();
+  delay(1000);
+}
+
+
+=============================================================
+
+2) Fire / Flame Sensor
+
+int isFlamePin = 8;
+int isFlame = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(isFlamePin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  isFlame = digitalRead(isFlamePin);
+  if(isFlamePin == 1) {
+    Serial.println("Fire !! Fire !!");
+  } else {
+    Serial.println("No Fire");
+  }
+}
+
+================================================================
+
+3) Humidity Sensor
+
+#include "DHT.h"
+#define DHTPIN 2
+#define DHTTYPE DHT11
+
+DHT dht (DHTPIN, DHTTYPE);
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("DHT Test!");
+  dht.begin();
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  delay(2000);
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  float f = dht.readTemperature(true);
+
+  if(isnan(h) || isnan(f) || isnan(t)) {
+    Serial.println("Falied to read from the sensor");
+    return;
+  }
+
+  float hif = dht.computeHeatIndex(f, h);
+  float hic = dht.computeHeatIndex(t, h, false);
+  Serial.println("-----------------------------------------------");
+  Serial.println("Humidity: " + String(h) + " %");
+  Serial.println("Temperature (in *C): " + String(t) + " *C");
+  Serial.println("Temperature (in *F): " + String(f) + " *F");
+  Serial.println("Heat Index (in *C): " + String(hic) + " *C");
+  Serial.println("Heat Index (in *F): " + String(hif) + " *F");
+}
+
+=========================================================================
+
+4) Touch Sensor
+
+const int touch = 4;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(touch, INPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int touchState = digitalRead(touch);
+  if(touchState == HIGH) {
+    Serial.println("Sensor is touched");
+  } else {
+    Serial.println("Sensor is untouched");
+  }
+  delay(1000);
+}
+
+=========================================================================
+
+5) Tap / Knock Sensor
+
+int tap = 4;
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(tap, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int value = digitalRead(tap);
+  if(value == HIGH) {
+    Serial.println("Knock Knock");
+  } else {
+    Serial.println("No Knocks");
+  }
+
+  delay(1000);
+}
+
+===========================================================================
+
+6) Mercury Tilt Sensor
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(7, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int value = digitalRead(7);
+  if(value == 1) {
+    Serial.println("Tilted");
+  } else {
+    Serial.println("Not Tilted");
+  }
+  delay(1000);
+}
+
+============================================================================
+
+7) Laser Emitter
+
+int laserPin = 13;
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(laserPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  digitalWrite(laserPin, HIGH);
+  delay(2000);
+  digitalWrite(laserPin, LOW);
+  delay(2000);
+}
+
+==============================================================================
+
+8) Button Sensor
+
+int buttonPin = 4;
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(buttonPin, INPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  button_state = digitalRead(buttonPin);
+  if(button_state == true) {
+    Serial.println("Button Pressed");
+  } else {
+    Serial.println("Button not pressed");
+  }
+  delay(1000);
+}
+
+===========================================================================
